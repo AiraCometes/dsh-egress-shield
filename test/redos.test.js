@@ -12,6 +12,7 @@ const PATHOLOGICAL = {
   'key=value spam': 'password='.repeat(SIZE / 9),
   'email-ish': 'a.'.repeat(SIZE / 2) + '@',
   'at-spam': '@a'.repeat(SIZE / 2),
+  'idn email-ish': 'a@' + '例.'.repeat(SIZE / 4) + 'テ'.repeat(SIZE / 2),
   digits: '4'.repeat(SIZE),
   'spaced digits': '4 '.repeat(SIZE / 2),
   'base64 run': 'Ab+/'.repeat(SIZE / 4),

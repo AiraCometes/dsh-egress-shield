@@ -42,6 +42,21 @@ test('U-11 requirement §5 example is redacted exactly as specified', () => {
   )
 })
 
+test('U-28 e-mail addresses stop at the top-level domain inside Japanese text', () => {
+  const e = engine()
+  for (const [input, expected] of [
+    [
+      `担当（${C.personal.email}）、住所は${C.personal.jaAddress}です。`,
+      `担当（[REDACTED_EMAIL_1]）、住所は[REDACTED_ADDRESS_1]です。`,
+    ],
+    [`${C.personal.email}です`, '[REDACTED_EMAIL_1]です'],
+    [`<${C.personal.email2}>まで`, '<[REDACTED_EMAIL_2]>まで'],
+    ['連絡先 taro@例え.テスト まで', '連絡先 [REDACTED_EMAIL_3] まで'],
+  ]) {
+    assert.equal(redact(input, e).out, expected)
+  }
+})
+
 test('U-01..10 each category is detected on its own', () => {
   const cases = [
     [`token: ${C.secrets.openaiKey}`, 'API_KEY'],

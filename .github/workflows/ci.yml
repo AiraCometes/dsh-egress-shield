@@ -1,7 +1,9 @@
 name: CI
 
 on:
+  # Branches are checked through their pull request; pushing to a PR branch would otherwise run CI twice.
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 

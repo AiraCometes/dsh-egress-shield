@@ -1,0 +1,36 @@
+# Git hooks managed by prek (https://prek.j178.dev). Install with `just hooks`.
+#:schema https://www.schemastore.org/prek.json
+#
+# pre-commit: fast checks on staged files (formatting, lint, types, secrets).
+# pre-push:   the full unit/integration test suite.
+# Tools come from mise (prek, gitleaks) and package.json (oxfmt, oxlint,
+# typescript, vitest); `npx --no-install` never downloads anything.
+
+[[repos]]
+repo = "builtin"
+hooks = [
+  { id = "trailing-whitespace", args = ["--markdown-linebreak-ext=md"] },
+  { id = "end-of-file-fixer" },
+  # .gitignore keeps GitHub's macOS template, whose "Icon\r" pattern needs a literal CR.
+  { id = "mixed-line-ending", args = ["--fix=lf"], exclude = "^\\.gitignore$" },
+  { id = "check-merge-conflict" },
+  { id = "check-added-large-files", args = ["--maxkb=200"], exclude = "^package-lock\\.json$" },
+  { id = "check-yaml" },
+  { id = "check-json" },
+  { id = "check-toml" },
+  { id = "check-executables-have-shebangs" },
+  # The ReDoS tests feed a bare key header (no key material) to the detector.
+  { id = "detect-private-key", exclude = "^test/redos\\.test\\.js$" },
+]
+
+[[repos]]
+repo = "local"
+hooks = [
+  { id = "gitleaks", name = "gitleaks (staged changes)", entry = "gitleaks git --pre-commit --staged --redact --no-banner", language = "system", pass_filenames = false },
+  { id = "oxfmt", name = "oxfmt", entry = "npx --no-install oxfmt --no-error-on-unmatched-pattern", language = "system", files = "\\.(js|mjs|json|toml|ya?ml)$", exclude = "^src/core/rules/gitleaks\\.generated\\.js$" },
+  { id = "oxlint", name = "oxlint", entry = "npx --no-install oxlint --deny-warnings", language = "system", files = "\\.(js|mjs)$" },
+  { id = "typecheck", name = "tsc (checkJs)", entry = "npx --no-install tsc -p .", language = "system", pass_filenames = false, files = "(\\.(js|mjs)|tsconfig\\.json)$" },
+  { id = "vitest", name = "vitest", entry = "npx --no-install vitest run", language = "system", pass_filenames = false, stages = [
+    "pre-push",
+  ] },
+]

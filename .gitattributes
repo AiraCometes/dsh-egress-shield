@@ -1,0 +1,5 @@
+# Normalise text files to LF in the repository (Windows/WSL checkouts included).
+* text=auto eol=lf
+
+# GitHub's macOS template matches the "Icon\r" file with a literal CR; keep it byte-for-byte.
+.gitignore -text

@@ -1,0 +1,44 @@
+name: Bug report
+description: Something does not work as documented (crashes, wrong errors, broken requests).
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Never paste real secrets, credentials, keys or personal data — not even revoked ones.** Use fictitious values.
+        If the problem lets sensitive data leave your machine, report it privately instead (Security → Report a vulnerability).
+  - type: input
+    id: version
+    attributes:
+      label: egress-shield commit
+      placeholder: e.g. a94b37a
+    validations:
+      required: true
+  - type: input
+    id: dsh
+    attributes:
+      label: DSH version and profile
+      placeholder: e.g. @deepseek-ai/dsh 0.2.0-rc.2, web profile
+    validations:
+      required: true
+  - type: input
+    id: provider
+    attributes:
+      label: Provider route
+      placeholder: e.g. opencode-go (pi-ai, OpenAI Chat) / deepseek-official (Anthropic Messages)
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened and what you expected
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce (fictitious data only)
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error code or log lines
+      description: egress-shield error codes and audit entries never contain values. Check anything else before pasting.
+      render: text

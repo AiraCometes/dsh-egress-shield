@@ -1,0 +1,39 @@
+name: Detection gap or false positive
+description: A value that should be masked is not (with fictitious data), or ordinary text is masked by mistake.
+labels: [detection]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Describe the shape, not the value.** Never paste a real secret, credential, key, name or address.
+        A gap that already leaked real data, or a reliable bypass technique, belongs in a private report (Security → Report a vulnerability).
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - Missed value (false negative)
+        - Wrongly masked (false positive)
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        [API_KEY, SSH_KEY, PASSWORD, CARD, TAILSCALE_URL, EMAIL, USERNAME, HOSTNAME, PERSON, ADDRESS, PATH, other]
+    validations:
+      required: true
+  - type: textarea
+    id: shape
+    attributes:
+      label: Shape of the value and its context
+      description: e.g. "40 characters, prefix `abc_`, base62, inside a YAML value under `apiToken:`". A fictitious example that reproduces it is ideal.
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: What egress-shield produced
+      description: Output of `node bin/egress-shield.mjs scan` on your fictitious example, if you have one.
+      render: text

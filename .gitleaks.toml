@@ -1,0 +1,7 @@
+# Repository secret scanning (pre-commit via prek, `just secrets`).
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Imported Gitleaks rule data: regular expressions, not secrets"
+paths = ['''^src/core/rules/gitleaks\.generated\.js$''']

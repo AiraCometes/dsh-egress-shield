@@ -1,0 +1,81 @@
+{
+  "name": "dsh-egress-shield",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local, fail-closed redaction gateway that masks secrets and personal data before DeepSeek Harness (or any harness) sends requests to an LLM provider.",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "gateway",
+    "llm",
+    "pii",
+    "privacy",
+    "redaction",
+    "secrets"
+  ],
+  "homepage": "https://github.com/AiraCometes/dsh-egress-shield#readme",
+  "bugs": {
+    "url": "https://github.com/AiraCometes/dsh-egress-shield/issues"
+  },
+  "license": "MIT",
+  "author": "AiraCometes",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AiraCometes/dsh-egress-shield.git"
+  },
+  "bin": {
+    "egress-shield": "bin/egress-shield.mjs"
+  },
+  "files": [
+    "src",
+    "bin",
+    "cordis.patch.yml",
+    "THIRD_PARTY_NOTICES.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "main": "src/dsh/plugin.js",
+  "exports": {
+    ".": "./src/dsh/plugin.js",
+    "./core": "./src/core/index.js",
+    "./gateway": "./src/gateway/index.js",
+    "./setup": "./src/setup.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:e2e": "vitest run --config vitest.e2e.config.js",
+    "bench": "node scripts/bench.mjs",
+    "compare": "node scripts/compare-scanners.mjs",
+    "import-gitleaks": "node scripts/import-gitleaks.mjs",
+    "lint": "oxlint",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "typecheck": "tsc -p ."
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "oxfmt": "0.73.0",
+    "oxlint": "1.88.0",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": ">=4.0.0 <5"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

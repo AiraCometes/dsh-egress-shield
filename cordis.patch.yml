@@ -1,0 +1,20 @@
+# dsh-egress-shield bundle patch. Mounted by `dsh plugin --profile <p> add ...`.
+#
+# The plugin refuses every provider that is not listed in routedProviders, so
+# after installing you MUST (1) list your provider routes under `routes`,
+# (2) list the DSH provider ids under `routedProviders`, and (3) point each
+# provider's baseURL at http://127.0.0.1:<port>/r/<route>. See
+# README.md (Installation). Until then LLM requests fail closed — nothing leaks.
+- insert:
+    - id: egress-shield
+      name: dsh-egress-shield
+      config:
+        listen:
+          host: 127.0.0.1
+          port: 47821
+        routes: {}
+        routedProviders: []
+        pathMode: anchored
+        attachments: ask
+        restore:
+          enabled: true

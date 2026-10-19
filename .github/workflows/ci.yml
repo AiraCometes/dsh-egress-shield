@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Format, lint, types, tests, secrets
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # Gitleaks scans the full history
+          persist-credentials: false
+      - uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+        with:
+          version: 2026.10.14
+          install: true
+          cache: true
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: just check
+      - name: Repository hygiene (prek hooks on all files)
+        run: prek run --all-files --show-diff-on-failure
+
+  e2e:
+    name: End-to-end against DeepSeek Harness
+    needs: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DSH_VERSION: 0.2.0-rc.2
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+        with:
+          version: 2026.10.14
+          install: true
+          cache: true
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Install DeepSeek Harness (install scripts disabled)
+        run: npm install --prefix "$RUNNER_TEMP/dsh" --ignore-scripts --no-audit --no-fund "@deepseek-ai/dsh@${DSH_VERSION}"
+      - name: Run end-to-end tests (local mock provider, no external LLM traffic)
+        run: just test-e2e "$RUNNER_TEMP/dsh/node_modules/@deepseek-ai/dsh/lib/bin.js"

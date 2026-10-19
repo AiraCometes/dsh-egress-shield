@@ -1,0 +1,8 @@
+# Tool versions for development. Runtime needs only Node (DSH supplies it);
+# everything else here is dev tooling. npm-distributed tools (oxlint, oxfmt,
+# vitest, typescript) are pinned in package.json / package-lock.json instead.
+[tools]
+node = "22.22.0"
+just = "1.59.0"
+prek = "0.5.6"
+gitleaks = "8.30.1"

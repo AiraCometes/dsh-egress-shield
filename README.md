@@ -71,7 +71,7 @@ Rejected or unanswered requests are not sent.
 
 ## Installation
 
-Requirements: Node.js 22+, DSH 0.2.x. Install from a reviewed commit rather than by package name (npm names are easy
+Requirements: Node.js 22+, DSH 0.2.x, and pnpm on `PATH` (DSH's `dsh plugin add` uses it). Install from a reviewed commit rather than by package name (npm names are easy
 to squat):
 
 ```sh

@@ -3,8 +3,10 @@
 
 const CARD_CUE_RE = /(?:card|カード|クレジット|credit|visa|master|amex|jcb|cc[-_ ]?(?:num|no)|pan)[^\n]{0,20}$/i
 const CARD_RE = /(?<![\d.,-])\d(?:[ -]?\d){12,18}(?![\d])/g
+// Labels may be internationalised (letters and digits of any script), but the top-level domain is either all ASCII or
+// all non-ASCII letters, so `taro@example.com）、住所は…` stops at `com` instead of running into the Japanese text.
 const EMAIL_RE =
-  /(?<![A-Za-z0-9._%+-])[A-Za-z0-9._%+-]{1,64}@(?:[A-Za-z0-9¡-￿](?:[A-Za-z0-9¡-￿-]{0,61}[A-Za-z0-9¡-￿])?\.){1,8}[A-Za-z¡-￿]{2,24}(?![A-Za-z0-9-])/g
+  /(?<![A-Za-z0-9._%+-])[A-Za-z0-9._%+-]{1,64}@(?:[\p{L}\p{N}](?:[\p{L}\p{N}-]{0,61}[\p{L}\p{N}])?\.){1,8}(?:[A-Za-z]{2,24}(?![A-Za-z0-9-])|[^\P{L}A-Za-z]{2,24}(?![\p{L}\p{N}-]))/gu
 // host[.sub].ts.net with an optional :port. The scheme and path are left alone
 // so credentials or query secrets inside the URL are still judged separately.
 const TS_HOST_RE =

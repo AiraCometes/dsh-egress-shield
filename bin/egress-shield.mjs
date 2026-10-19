@@ -46,7 +46,10 @@ if (command === 'serve') {
   })
   const scope = engine.scope('cli')
   const counts = {}
-  process.stdout.write(engine.redactString(Buffer.concat(chunks).toString('utf8'), scope, counts).text)
+  const input = Buffer.concat(chunks).toString('utf8')
+  // Like the gateway: placeholders typed into the input are reserved so a real value never reuses their number.
+  engine.reservePlaceholders(input, scope)
+  process.stdout.write(engine.redactString(input, scope, counts).text)
   console.error(`\n[egress-shield] ${JSON.stringify(counts)}`)
 } else {
   console.log(

@@ -57,6 +57,13 @@ test('U-28 e-mail addresses stop at the top-level domain inside Japanese text', 
   }
 })
 
+test('U-29 incomplete or mixed-script top-level domains are not e-mail addresses', () => {
+  const e = engine()
+  for (const input of ['taro@example', 'taro@example.c', 'taro@example.cです']) {
+    assert.equal(redact(input, e).out, input)
+  }
+})
+
 test('U-01..10 each category is detected on its own', () => {
   const cases = [
     [`token: ${C.secrets.openaiKey}`, 'API_KEY'],

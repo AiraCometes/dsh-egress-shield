@@ -1,5 +1,8 @@
 # yaml-language-server: $schema=https://www.coderabbit.ai/integrations/schema.v2.json
 # CodeRabbit review settings. This file takes precedence over the settings on coderabbit.ai.
+# inheritance: false makes it the single source of truth: anything not set here uses CodeRabbit's defaults, never the
+# repository or organization settings on the website.
+inheritance: false
 language: ja-JP
 tone_instructions: Be concise and friendly. Prioritise leaks of secrets or personal data and fail-open behaviour over style.
 

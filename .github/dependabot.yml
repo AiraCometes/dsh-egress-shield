@@ -7,6 +7,11 @@ updates:
     groups:
       dev-tooling:
         dependency-type: development
+    ignore:
+      # @types/node tracks the oldest supported Node (engines.node), not the latest release; newer typings would let
+      # code type-check against APIs that older runtimes lack. Raise it together with engines.node.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule:

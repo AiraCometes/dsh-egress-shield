@@ -4,5 +4,7 @@
 [tools]
 node = "22.22.0"
 just = "1.59.0"
+# `dsh plugin add` shells out to pnpm (the E2E tests install the plugin that way).
+pnpm = "10.28.0"
 prek = "0.5.6"
 gitleaks = "8.30.1"

@@ -15,7 +15,7 @@ Thanks for helping make egress-shield better. Issues and pull requests are welco
 
 ## Development setup
 
-You need [mise](https://mise.jdx.dev); it installs Node, just, prek and Gitleaks at the versions in `mise.toml`.
+You need [mise](https://mise.jdx.dev); it installs Node, pnpm, just, prek and Gitleaks at the versions in `mise.toml`.
 
 ```sh
 mise install

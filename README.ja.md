@@ -51,7 +51,7 @@ Base64、パーセントエンコード、`\uXXXX` エスケープの内側も�
 
 ## 導入
 
-必要なもの: Node.js 22 以上、DSH 0.2.x。npm の名前はなりすましに使われやすいので、パッケージ名ではなく、レビューしたコミットから導入してください。
+必要なもの: Node.js 22 以上、DSH 0.2.x、`PATH` 上の pnpm（DSH の `dsh plugin add` が使います）。npm の名前はなりすましに使われやすいので、パッケージ名ではなく、レビューしたコミットから導入してください。
 
 ```sh
 git clone https://github.com/AiraCometes/dsh-egress-shield ~/src/dsh-egress-shield

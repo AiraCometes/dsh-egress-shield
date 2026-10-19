@@ -1,0 +1,95 @@
+# yaml-language-server: $schema=https://www.coderabbit.ai/integrations/schema.v2.json
+# CodeRabbit review settings. This file takes precedence over the settings on coderabbit.ai.
+# inheritance: false makes it the single source of truth: anything not set here uses CodeRabbit's defaults, never the
+# repository or organization settings on the website.
+inheritance: false
+language: ja-JP
+tone_instructions: Be concise and friendly. Prioritise leaks of secrets or personal data and fail-open behaviour over style.
+
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  high_level_summary_in_walkthrough: true
+  high_level_summary_instructions: |
+    Keep it to at most 5 concise bullet points. Explicitly mention any of the following that apply, and omit those that do not:
+    - Impact on fail-closed behaviour (whether requests that cannot be inspected are still blocked)
+    - Detection categories added, changed or removed, and the expected effect on false positives / false negatives
+    - Impact on protected paths: gateway, egress guard, tool-argument restoration, attachment approval
+    - Dependencies added or updated (runtime dependencies are not allowed)
+    - Tests added or changed (core / gateway / redos / plugin / e2e)
+  poem: false
+  in_progress_fortune: false
+  auto_review:
+    enabled: true
+    drafts: false
+  path_filters:
+    - '!src/core/rules/gitleaks.generated.js'
+    - '!package-lock.json'
+  path_instructions:
+    - path: 'src/core/detectors/**'
+      instructions: >-
+        Regular expressions must be ReDoS-safe: bounded quantifiers, no optional separators inside repeated groups.
+        New rules need positive and negative cases in test/core.test.js and a pathological input in test/redos.test.js.
+    - path: 'src/core/**'
+      instructions: >-
+        Irreversible categories (API_KEY, SSH_KEY, PASSWORD, CARD) must never be stored or restorable; only a keyed hash
+        may be kept. The same value must map to the same placeholder within a session.
+    - path: 'src/gateway/**'
+      instructions: >-
+        Flag any change that weakens fail-closed behaviour (a path that sends a request it could not inspect) as the
+        highest priority. Error codes and audit logs must never contain the redacted values themselves. Tool-argument
+        restoration must stay limited to PATH and USERNAME for local file and non-network shell tools.
+    - path: 'src/dsh/**'
+      instructions: >-
+        The plugin must refuse unrouted providers and keep the egress guard installed. Images must not be sent without
+        explicit user approval; an unanswered or failed approval must block the request.
+    - path: 'test/**'
+      instructions: >-
+        Check that no realistic-looking secrets or personal data are present. Only obviously fictitious data is allowed,
+        preferably generated at test time as in test/support/corpus.mjs.
+    - path: '.github/workflows/**'
+      instructions: >-
+        Actions must be pinned by full commit SHA, permissions must stay minimal (contents: read by default), and
+        dependency installs must keep --ignore-scripts.
+  pre_merge_checks:
+    docstrings:
+      mode: 'off'
+    title:
+      mode: warning
+      requirements: >-
+        A short imperative summary. Conventional Commits prefixes (feat:, fix:, docs:, chore:) are welcome but not
+        required.
+  tools:
+    # Test fixtures intentionally contain fictitious personal data; Presidio would flag them on every PR.
+    presidio:
+      enabled: false
+    # Formatting and linting are handled by Oxfmt and Oxlint (oxc below).
+    biome:
+      enabled: false
+    eslint:
+      enabled: false
+    oxc:
+      enabled: true
+    gitleaks:
+      enabled: true
+    trufflehog:
+      enabled: true
+    actionlint:
+      enabled: true
+    zizmor:
+      enabled: true
+    shellcheck:
+      enabled: true
+    osvScanner:
+      enabled: true
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - CONTRIBUTING.md
+      - SECURITY.md

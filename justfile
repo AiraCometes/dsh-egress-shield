@@ -33,11 +33,11 @@ typecheck:
 
 # Unit, integration, ReDoS and plugin tests
 test:
-    npx --no-install vitest run
+    npx --no-install vitest run --project unit
 
 # End-to-end tests against a real DSH: just test-e2e /path/to/@deepseek-ai/dsh/lib/bin.js
 test-e2e dsh_bin:
-    DSH_BIN={{dsh_bin}} npx --no-install vitest run --config vitest.e2e.config.js
+    DSH_BIN={{dsh_bin}} npx --no-install vitest run --project e2e
 
 # Scan the working tree and git history for secrets
 secrets:

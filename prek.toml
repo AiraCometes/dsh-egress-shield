@@ -30,7 +30,7 @@ hooks = [
   { id = "oxfmt", name = "oxfmt", entry = "npx --no-install oxfmt --no-error-on-unmatched-pattern", language = "system", files = "\\.(js|mjs|json|toml|ya?ml)$", exclude = "^src/core/rules/gitleaks\\.generated\\.js$" },
   { id = "oxlint", name = "oxlint", entry = "npx --no-install oxlint --deny-warnings", language = "system", files = "\\.(js|mjs)$" },
   { id = "typecheck", name = "tsc (checkJs)", entry = "npx --no-install tsc -p .", language = "system", pass_filenames = false, files = "(\\.(js|mjs)|tsconfig\\.json)$" },
-  { id = "vitest", name = "vitest", entry = "npx --no-install vitest run", language = "system", pass_filenames = false, stages = [
+  { id = "vitest", name = "vitest", entry = "npx --no-install vitest run --project unit", language = "system", pass_filenames = false, stages = [
     "pre-push",
   ] },
 ]
